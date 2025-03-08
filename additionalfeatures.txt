@@ -1,1 +1,14 @@
+Rabbi map
+add earlier and more rabbis
 range of impact
+if u click on a scholar, u can see his travels
+map is in accordance with date
+Timeline toggle 
+
+Communities map
+add communities
+
+
+Bugs:
+Filters are wack
+Search is wack

@@ -171,62 +171,81 @@ body {
     left: 50%;
     transform: translateX(-50%);
     background: white;
-    padding: 16px 24px;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    padding: 12px 16px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     z-index: 1000;
-    width: 400px;
+    width: 320px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.year-control {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #f1f3f4;
+    padding: 4px 8px;
+    border-radius: 4px;
+    flex-shrink: 0;
+}
+
+.year-control span {
+    color: #5f6368;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.year-input {
+    width: 60px;
+    padding: 2px;
+    border: none;
+    background: transparent;
+    font-size: 13px;
+    color: #202124;
+    text-align: center;
+}
+
+.year-input:focus {
+    outline: none;
 }
 
 #timeline {
+    flex: 1;
     -webkit-appearance: none;
-    width: 100%;
-    height: 4px;
+    height: 3px;
     background: #e0e0e0;
     border-radius: 2px;
     outline: none;
-    opacity: 0.9;
-    transition: opacity .2s;
 }
 
-#timeline:hover {
-    opacity: 1;
-}
-
-/* Slider thumb styles */
 #timeline::-webkit-slider-thumb {
     -webkit-appearance: none;
-    appearance: none;
-    width: 20px;
-    height: 20px;
-    background: #4285f4;
+    width: 16px;
+    height: 16px;
+    background: #1a73e8;
     border-radius: 50%;
     cursor: pointer;
     border: 2px solid white;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-    transition: all 0.2s ease;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.2);
 }
 
 #timeline::-moz-range-thumb {
-    width: 20px;
-    height: 20px;
-    background: #4285f4;
+    width: 16px;
+    height: 16px;
+    background: #1a73e8;
     border-radius: 50%;
     cursor: pointer;
     border: 2px solid white;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-    transition: all 0.2s ease;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.2);
 }
 
-/* Hover effect on thumb */
-#timeline::-webkit-slider-thumb:hover {
-    transform: scale(1.1);
-    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-}
-
+/* Remove hover scaling for more Google-like feel */
+#timeline::-webkit-slider-thumb:hover,
 #timeline::-moz-range-thumb:hover {
-    transform: scale(1.1);
-    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    transform: none;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.3);
 }
 
 #year-display {
@@ -242,11 +261,156 @@ body {
     top: 20px;
     right: 20px;
     background: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    max-width: 300px;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+    width: 380px;
+    max-height: calc(100vh - 40px);
+    overflow-y: auto;
     z-index: 1000;
+}
+
+.scholar-header {
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.scholar-image {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #f5f5f5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.scholar-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.placeholder-image {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #999;
+    font-size: 32px;
+}
+
+.scholar-title h2 {
+    margin: 0;
+    font-size: 20px;
+    color: #202124;
+    font-weight: 500;
+}
+
+.scholar-title .years {
+    margin: 4px 0 0;
+    color: #5f6368;
+    font-size: 14px;
+}
+
+.scholar-content {
+    padding: 20px;
+}
+
+.scholar-details {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 20px;
+}
+
+.detail-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.detail-item:last-child {
+    margin-bottom: 0;
+}
+
+.detail-item .label {
+    color: #5f6368;
+    font-size: 14px;
+}
+
+.detail-item .value {
+    color: #202124;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.scholar-description {
+    margin-bottom: 20px;
+    line-height: 1.5;
+    color: #202124;
+}
+
+.scholar-works {
+    margin-bottom: 20px;
+}
+
+.scholar-works h3 {
+    font-size: 16px;
+    color: #202124;
+    margin: 0 0 12px;
+}
+
+.scholar-works ul {
+    margin: 0;
+    padding-left: 20px;
+    color: #5f6368;
+}
+
+.scholar-works li {
+    margin-bottom: 4px;
+}
+
+.learn-more {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #1a73e8;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 8px 0;
+}
+
+.learn-more:hover {
+    color: #174ea6;
+}
+
+#close-info {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #5f6368;
+    padding: 4px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+}
+
+#close-info:hover {
+    background-color: #f1f3f4;
+    color: #202124;
 }
 
 .hidden {
@@ -264,4 +428,24 @@ body {
 /* Add hover effect to collapsed search box */
 .search-container.collapsed #search-box:hover {
     background-color: #f0f0f0;
+}
+
+/* Tooltip styling */
+.scholar-tooltip {
+    background: white;
+    border: none;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.scholar-tooltip::before {
+    border-top-color: white;
+}
+
+/* Hide the default year display since we're using the input */
+#year-display {
+    display: none;
 } 
