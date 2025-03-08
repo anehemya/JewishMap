@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jewish Scholars Timeline Map</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div id="map"></div>
+        <div class="timeline-container">
+            <input type="range" id="timeline" min="800" max="2024" value="1000" step="1">
+            <div id="year-display">Year: 1000</div>
+        </div>
+        <div id="scholar-info" class="hidden">
+            <h2 id="scholar-name"></h2>
+            <p id="scholar-years"></p>
+            <p id="scholar-description"></p>
+            <a id="scholar-link" target="_blank">Learn More</a>
+        </div>
+    </div>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="scholars.js"></script>
+    <script src="app.js"></script>
+</body>
+</html> 
