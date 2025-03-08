@@ -3,9 +3,20 @@ let markers = [];
 const activeScholars = new Set();
 
 function initMap() {
-    map = L.map('map').setView([31.7683, 35.2137], 4);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap contributors'
+    map = L.map('map', {
+        minZoom: 3,  // Prevents zooming out too far
+        maxZoom: 18, // Standard max zoom level
+        worldCopyJump: true, // Enables smooth transition when crossing the date line
+        center: [31.7683, 35.2137],
+        zoom: 4
+    });
+
+    // Using Carto's Voyager basemap - free, no API key required
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        subdomains: 'abcd',
+        maxZoom: 20,
+        continuousWorld: true
     }).addTo(map);
 }
 
@@ -75,34 +86,123 @@ function hideScholarInfo() {
     document.getElementById('scholar-info').classList.add('hidden');
 }
 
-// Add category filter UI
-function addCategoryFilters() {
-    const filterContainer = document.createElement('div');
-    filterContainer.className = 'filter-container';
+function initSearchAndFilters() {
+    // Create search container
+    const searchContainer = document.createElement('div');
+    searchContainer.className = 'search-container collapsed';
     
-    Object.keys(scholarCategories).forEach(category => {
-        const checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-        checkbox.id = category;
-        checkbox.checked = true;
-        checkbox.addEventListener('change', () => updateMap(parseInt(timeline.value)));
-        
-        const label = document.createElement('label');
-        label.htmlFor = category;
-        label.textContent = category;
-        label.style.color = scholarCategories[category].color;
-        
-        filterContainer.appendChild(checkbox);
-        filterContainer.appendChild(label);
+    // Create search input
+    const searchInput = document.createElement('div');
+    searchInput.className = 'search-input-container';
+    searchInput.innerHTML = `
+        <input type="text" id="search-box" placeholder="Search for a rabbi or location">
+        <button class="search-button">
+            <i class="fas fa-search"></i>
+        </button>
+    `;
+
+    // Create filters panel
+    const filtersPanel = document.createElement('div');
+    filtersPanel.className = 'filters-panel';
+    filtersPanel.innerHTML = `
+        <div class="filter-group">
+            <h3>Time Period</h3>
+            <div class="filter-options">
+                ${Object.keys(scholarCategories).map(category => `
+                    <label class="filter-option">
+                        <input type="checkbox" id="${category}" checked>
+                        <span class="checkmark"></span>
+                        <span class="label-text">${category}</span>
+                    </label>
+                `).join('')}
+            </div>
+        </div>
+        <div class="filter-group">
+            <h3>Region</h3>
+            <div class="filter-options">
+                ${Object.keys(scholarRegions).map(region => `
+                    <label class="filter-option">
+                        <input type="checkbox" id="${region}" checked>
+                        <span class="checkmark"></span>
+                        <span class="label-text">${region}</span>
+                    </label>
+                `).join('')}
+            </div>
+        </div>
+        <div class="filter-group">
+            <h3>Specialty</h3>
+            <div class="filter-options">
+                <label class="filter-option">
+                    <input type="checkbox" checked>
+                    <span class="checkmark"></span>
+                    <span class="label-text">Talmudist</span>
+                </label>
+                <label class="filter-option">
+                    <input type="checkbox" checked>
+                    <span class="checkmark"></span>
+                    <span class="label-text">Philosopher</span>
+                </label>
+                <label class="filter-option">
+                    <input type="checkbox" checked>
+                    <span class="checkmark"></span>
+                    <span class="label-text">Kabbalist</span>
+                </label>
+                <label class="filter-option">
+                    <input type="checkbox" checked>
+                    <span class="checkmark"></span>
+                    <span class="label-text">Halachist</span>
+                </label>
+            </div>
+        </div>
+    `;
+
+    searchContainer.appendChild(searchInput);
+    searchContainer.appendChild(filtersPanel);
+    document.querySelector('.container').appendChild(searchContainer);
+
+    // Add click handlers for collapsing/expanding
+    const searchBox = document.getElementById('search-box');
+    
+    // Expand when clicking the search box
+    searchBox.addEventListener('click', (e) => {
+        searchContainer.classList.remove('collapsed');
+        e.stopPropagation();
     });
-    
-    document.querySelector('.container').insertBefore(filterContainer, document.getElementById('map'));
+
+    // Collapse when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!searchContainer.contains(e.target)) {
+            searchContainer.classList.add('collapsed');
+            searchBox.blur(); // Remove focus from search box
+        }
+    });
+
+    // Prevent collapse when clicking inside the container
+    searchContainer.addEventListener('click', (e) => {
+        e.stopPropagation();
+    });
+
+    // Add search functionality
+    searchBox.addEventListener('input', handleSearch);
 }
 
-// Initialize the application
+function handleSearch(event) {
+    const searchTerm = event.target.value.toLowerCase();
+    
+    // Search through scholars
+    const matchingScholars = scholars.filter(scholar => 
+        scholar.name.toLowerCase().includes(searchTerm) ||
+        (scholar.coordinates.lat + ',' + scholar.coordinates.lng).includes(searchTerm)
+    );
+
+    // For now, just console.log the matches
+    console.log('Matching scholars:', matchingScholars);
+}
+
+// Update the initialization
 document.addEventListener('DOMContentLoaded', () => {
     initMap();
-    addCategoryFilters();
+    initSearchAndFilters();
 
     const timeline = document.getElementById('timeline');
     const yearDisplay = document.getElementById('year-display');
@@ -113,6 +213,5 @@ document.addEventListener('DOMContentLoaded', () => {
         updateMap(year);
     });
 
-    // Initial update
     updateMap(parseInt(timeline.value));
 }); 
